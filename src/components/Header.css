@@ -1,0 +1,98 @@
+.app-header {
+  position: absolute;
+  top: 32px;
+  left: 64px;
+  right: 64px;              /* ⬅️ kľúčové */
+  z-index: 100;
+  display: flex;            /* ⬅️ kľúčové */
+  align-items: center;
+  justify-content: space-between;
+}
+
+
+.app-logo {
+  margin-left: -40px;
+  height: 45px;
+  cursor: pointer;
+}
+
+.logout-btn {
+  border-radius: 999px;
+  cursor: pointer;
+  width: auto;
+  align-items: end;
+  margin: 0;
+  z-index: 1000;
+}
+
+/* default – desktop */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.drawer-toggle {
+  display: none;
+  background: #dae4ff;
+  border: none;
+  font-size: 30px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #1800ad;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+/* mobile */
+@media (max-width: 768px) {
+  .drawer-toggle {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 0px; /* vedľa Odhlásiť sa */
+  }
+   .drawer-toggle button{
+    margin: 0px;
+    padding: 0px;
+   }
+}
+@media (max-width: 768px) {
+  .logout-btn {
+  border-radius: 999px;
+  cursor: pointer;
+  width: auto;
+  align-items: end;
+  margin: 0;
+  font-size: 13px;
+  padding-top: 9px;
+  padding-bottom: 8px;
+  padding-left: 10px;
+  padding-right: 10px;
+  z-index: 1000;
+
+}
+.app-logo {
+  margin-left: -30px;
+  height: 35px;
+  cursor: pointer;
+}
+.app-header {
+  position: absolute;
+  top: 12px;
+  left: 60px;
+  right: 15px;              /* ⬅️ kľúčové */
+  z-index: 100;
+
+  display: flex;            /* ⬅️ kľúčové */
+  align-items: center;
+  justify-content: space-between;
+}
+}
+/* kontajner pre logout + burger */
+
+
+
+

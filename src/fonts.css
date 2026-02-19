@@ -1,0 +1,21 @@
+/* =========================
+   RECOLETA
+========================= */
+@font-face {
+  font-family: "Recoleta";
+  src: url("./assets/fonts/Recoleta_Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* =========================
+   AGRANDIR
+========================= */
+@font-face {
+  font-family: "Agrandir";
+  src: url("./assets/fonts/Agrandir.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}

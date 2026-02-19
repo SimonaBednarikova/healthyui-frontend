@@ -1,0 +1,489 @@
+/* =========================
+   PAGE WRAPPER
+========================= */
+
+.scenario-page {
+  padding: 48px 64px;
+  background: #ffffff;
+  min-height: calc(100vh - 80px);
+  box-sizing: border-box;
+}
+
+/* =========================
+   BACK BUTTON
+========================= */
+
+.scenario-page > button {
+  font-family: "Agrandir", sans-serif;
+  margin-top: 80px;
+    width: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: #000;
+    background: white;
+    border: 1px solid #000;
+    border-radius: 999px;
+    padding: 5px 5px;
+    cursor: pointer;
+    font-size: 12px;
+
+  display: inline-flex;      /* 🔑 kľúčové */
+  align-self: flex-start;    /* 🔑 kľúčové */
+
+  margin-bottom: 24px;
+}
+
+
+/* =========================
+   MAIN LAYOUT
+========================= */
+
+.scenario-layout {
+  display: grid;
+  grid-template-columns: 480px 1fr;
+  gap: 96px;
+}
+p{
+    margin-bottom: 0px !important;
+}
+
+/* =========================
+   LEFT PANEL
+========================= */
+.scenario-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 0;
+}
+
+
+
+.scenario-info {
+  
+  border-radius: 24px;
+  
+  position: relative;
+
+}
+
+.scenario-step {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+
+  background: #dae4ff;
+  color: #1800ad;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  flex-shrink: 0;
+  margin-top: -8px;
+}
+
+
+
+/* NAME */
+.scenario-info h1 {
+  font-family: "Agrandir", sans-serif;
+  font-size: 30px;
+  font-weight: 800;
+  margin: 0;
+  text-align: left;
+  padding-top: 15px;
+}
+
+
+/* AGE + ROLE */
+.scenario-info > p {
+  margin: 0 0 10px;
+  font-size: 14px;
+  color: #111827;
+}
+
+/* TAGS */
+.scenario-info .tags {
+  display: flex;
+  gap: 8px;
+  margin: 0px 0 25px;
+  flex-wrap: wrap;
+}
+
+
+.scenario-info .tag {
+  background: #ffffff;
+  border: 1px solid #111827;
+  border-radius: 999px;
+
+  padding: 3px 12px;
+  font-size: 18px;
+  font-weight: bold;
+
+  color: #111827;
+ 
+}
+.scenario-info .tag .span{
+    transform: translateY(3px);
+}
+
+/* DESCRIPTION TEXT */
+.scenario-description {
+  font-size: 18px;
+  line-height: 1.5;
+  margin-bottom: 20px !important;
+  color: #111827;
+}
+
+.scenario-description strong {
+  display: block;
+  margin-top: 12px;
+}
+
+/* IMAGE */
+.scenario-info img {
+  width: calc(100% + 48px);
+  margin-left: -24px;
+  margin-right: -24px;
+  margin-bottom: -28px;
+
+  object-position: center top;
+
+  max-height: 480px;        /* 🔑 TOTO ZMENŠUJE KARTU */
+  object-fit: cover;
+
+  border-radius: 24px 24px 24px 24px !important;
+  display: block;
+}
+
+.scenario-meta {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+
+/* =========================
+   RIGHT PANEL – VOICE
+========================= */
+
+.scenario-voice {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* 🔑 vertikálne centrovanie */
+
+  text-align: center;
+  max-width: 500px;
+}
+.pre{
+   max-width: 500px; 
+}
+
+/* MIC BUTTON */
+.mic-button {
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: #2b19c8;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+
+  font-size: 18px;
+  font-weight: 600;
+}
+.mic-button:hover {
+  transform: scale(1.03);
+}
+.mic-button.active {
+  animation: pulse 3s infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(43, 25, 200, 0.6); }
+  70% { box-shadow: 0 0 0 24px rgba(43, 25, 200, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(43, 25, 200, 0); }
+}
+
+
+
+/* MIC ICON (emoji placeholder) */
+.mic-button {
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: #2b19c8;
+  border: none;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: transform 0.2s ease;
+}
+.mic-icon-img {
+  width: 90px;   /* tu riadiš veľkosť */
+  height: auto;
+}
+
+
+.mic-button:hover {
+  transform: scale(1.05);
+}
+.mic-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 0px;
+}
+
+.mic-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  
+  
+}
+
+.mic-text {
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1;
+  font-weight: bold;
+}
+
+.mic-hint-text {
+  margin-top: 25px;
+  font-size: 16px;
+  color: #111827;
+  text-align: center;
+  line-height: 1.5;
+  max-width: 350px;
+ 
+}
+.mic-hint-pristup{
+  padding-bottom: 10px;
+  font-size: 16px;
+  color: red;
+  text-align: center;
+  line-height: 1.5;
+  max-width: 300px;
+ 
+}
+
+
+.mic-button.active {
+  animation: pulse 2.5s infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(43, 25, 200, 0.5); }
+  30% { box-shadow: 0 0 0 20px rgba(43, 25, 200, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(43, 25, 200, 0); }
+}
+
+
+/* VOICE INFO TEXT */
+.scenario-voice p {
+  margin-top: 24px;
+  font-size: 14px;
+  color: #111827;
+  max-width: 280px;
+  line-height: 1.4;
+}
+.scenario-info h1 {
+  font-size: 48px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.scenario-info > p {
+  font-size: 16px;
+  margin-bottom: 16px;
+}
+
+/* =========================
+   BACK + TOGGLE BUTTONS
+========================= */
+
+.scenario-back {
+  /* toto je tvoj pôvodný .scenario-page > button, len konkrétnejšie */
+  font-family: "Agrandir", sans-serif;
+  margin-top: 80px;
+  width: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #000;
+  background: white;
+  border: 1px solid #000;
+  border-radius: 999px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  margin-bottom: 24px;
+}
+
+
+/* drawer nikdy neexistuje na desktope */
+
+.scenario-drawer {
+    display: none;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+/* =========================
+   MOBILE RESET
+========================= */
+
+@media (max-width: 768px) {
+    .scenario-voice {
+    min-height: calc(100vh - 64px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+    margin: 0 auto;
+  }
+  .module-card-component{
+    padding: 0px !important;
+  }
+  /* -------------------------
+     ZÁKLADNÝ LAYOUT
+  ------------------------- */
+
+
+  .scenario-layout {
+    display: block; /* zruší desktop grid */
+  }
+
+  .desktop-only {
+    display: none !important;
+  }
+
+  /* -------------------------
+     BURGER BUTTON
+     (viditeľný vždy, aj keď drawer je zatvorený)
+  ------------------------- */
+
+ 
+  /* keď je drawer otvorený, burger schovaj */
+
+
+  /* -------------------------
+     DRAWER (KARTA SCENÁRA)
+  ------------------------- */
+
+  .scenario-drawer {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 85vw;
+    max-width: 420px;
+    height: 100vh;
+
+    background: #fff9cc;
+    z-index: 50;
+    padding: 16px;
+    overflow-y: auto;
+
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+
+  .mobile-open .scenario-drawer {
+    transform: translateX(0);
+  }
+
+  /* -------------------------
+     OVERLAY
+  ------------------------- */
+
+  .drawer-overlay {
+    display: none;
+  }
+
+  .mobile-open .drawer-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+ 
+  }
+  .drawer-toggle {
+    z-index: 500; /* MUSÍ BYŤ NAD HEADEROM */
+  }
+  header,
+  .app-header {
+    z-index: 10;
+  }
+  .card-image img{
+    width: 100% !important;
+    max-width: 100% !important;
+
+    margin: 0px 0 0px 0px !important;
+    padding: 0px 10px 0px 10px !important;
+
+    border-radius: 16px !important;
+    display: block;
+
+    object-fit: cover;
+    object-position: center top;
+    max-height: 320px;
+  }
+  .module-text-detail{
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .scenario-back {
+  margin-top: 0px;
+  margin-bottom: 14px;
+}
+.module-card-component .tags{
+    margin-bottom: 0px;
+}
+  
+}
+
+@media (min-width: 769px) {
+  .scenario-info .module-card-component {
+
+    box-shadow:
+      0 40px 70px rgba(0, 0, 0, 0.06),
+      0 20px 40px rgba(0, 0, 0, 0.04);
+  }
+}
+
+
+.task-section {
+  margin-top: 0px;
+  padding-top: 5px;
+  
+}
+
+.task-section strong {
+  display: block;
+  margin-bottom: 0px;
+}
+

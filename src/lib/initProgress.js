@@ -1,11 +1,10 @@
-import { api } from "./api";
+﻿import { api } from "./api";
 
 export async function initProgressIfNeeded() {
   console.log("INIT PROGRESS STARTED");
 
   let me;
   try {
-    // ⚠️ Nechajme role ako "role" (ID) + skúsime aj role.name ak je povolené
     const meRes = await api("/users/me?fields=id,role,role.name,first_login_completed");
     me = meRes.data;
     console.log("ME:", me);
@@ -14,16 +13,14 @@ export async function initProgressIfNeeded() {
     return;
   }
 
-  // ✅ Robustná kontrola roly:
-  // - ak vieme prečítať názov roly a je to niečo iné než Student → skip
-  // - ak nevieme prečítať názov (undefined), NEBLOKUJEME init (typicky permissions)
+  // Allow both real students and admin testers to get scenario progress rows.
+  const allowedRoles = new Set(["Student", "Administrator"]);
   const roleName = typeof me.role === "object" ? me.role?.name : undefined;
-  if (roleName && roleName !== "Student") {
-    console.log("SKIP: not student (roleName=", roleName, ")");
+  if (roleName && !allowedRoles.has(roleName)) {
+    console.log("SKIP: unsupported role for progress init (roleName=", roleName, ")");
     return;
   }
 
-  // 1️⃣ over, či progress existuje
   let hasProgress = false;
   try {
     const existingProgressRes = await api(
@@ -32,16 +29,13 @@ export async function initProgressIfNeeded() {
     hasProgress = (existingProgressRes.data ?? []).length > 0;
   } catch (e) {
     console.error("INIT: failed to check existing progress", e);
-    // ak nevieme overiť, radšej neskipuj – pokračuj
   }
 
-  // ✅ Skip len vtedy, keď flag je true A zároveň progress reálne existuje
   if (me.first_login_completed === true && hasProgress) {
     console.log("SKIP: already initialized");
     return;
   }
 
-  // 2️⃣ načítaj scenáre (a keď to zlyhá, vypíš celú odpoveď)
   let scenarios = [];
   try {
     const scenariosRes = await api("/items/scenarios?fields=id&limit=-1");
@@ -53,11 +47,10 @@ export async function initProgressIfNeeded() {
   }
 
   if (scenarios.length === 0) {
-    console.log("SKIP: no scenarios returned (check Directus permissions for Student on scenarios)");
+    console.log("SKIP: no scenarios returned (check Directus permissions for allowed roles on scenarios)");
     return;
   }
 
-  // 3️⃣ vytvor progress (idempotentne – chyby len zalogujeme)
   for (const scenario of scenarios) {
     try {
       await api("/items/user_scenario_progress", {
@@ -68,13 +61,12 @@ export async function initProgressIfNeeded() {
           status: "NOT_STARTED",
         },
       });
-      console.log("✅ Created progress for scenario", scenario.id);
+      console.log("Created progress for scenario", scenario.id);
     } catch (e) {
-      console.warn("⚠️ Create progress failed (maybe already exists):", scenario.id);
+      console.warn("Create progress failed (maybe already exists):", scenario.id);
     }
   }
 
-  // 4️⃣ označ first login ako hotový (aj keď niektoré insert-y už existovali)
   try {
     await api("/users/me", {
       method: "PATCH",

@@ -318,7 +318,7 @@
  
   flex-wrap: wrap;
   margin-top: 0px;
-  margin-bottom: 30px;
+  margin-bottom: 15px;
 }
 
 .tag {
@@ -556,6 +556,12 @@
 
 .module-detail .tags {
   margin-top: 8px;
+}
+p.tag {
+  margin-top: 0;
+}
+div.tags {
+  padding-top: 20px;
 }
 
 @media (max-width: 768px) {

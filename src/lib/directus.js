@@ -1,4 +1,8 @@
-export const DIRECTUS_URL = "http://localhost:8055";
+/* ======================
+   IDRECTUS_URL pre local : export const DIRECTUS_URL = "http://localhost:8055";
+====================== */
+
+export const DIRECTUS_URL = import.meta.env.VITE_DIRECTUS_URL;
 
 /* ======================
    LOGIN
@@ -55,8 +59,8 @@ export function logout() {
 }
 
 /* ======================
-   ZMENA HESLA
-====================== */
+   ZMENA HESLA LOCAL
+
 export async function requestPasswordReset(email) {
   const res = await fetch(
     "http://localhost:8055/auth/password/request",
@@ -68,6 +72,28 @@ export async function requestPasswordReset(email) {
       body: JSON.stringify({
         email: email,
         reset_url: "http://localhost:5173/reset-password"
+      }),
+    }
+  );
+
+  if (!res.ok) {
+    const err = await res.text();
+    console.error("Password reset error:", err);
+    throw new Error("Password reset failed");
+  }
+} 
+====================== */
+export async function requestPasswordReset(email) {
+  const res = await fetch(
+    `${DIRECTUS_URL}/auth/password/request`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: email,
+        reset_url: `${window.location.origin}/reset-password`
       }),
     }
   );

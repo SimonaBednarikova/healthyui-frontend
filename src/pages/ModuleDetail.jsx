@@ -1,4 +1,4 @@
-import "./Modules.css";
+﻿import "./Modules.css";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { api } from "../lib/api";
@@ -20,7 +20,7 @@ export default function ModuleDetail() {
   useEffect(() => {
   if (!user?.id) return;
 
-  // 🔴 RESET STAVU PRI ZMENE USERA ALEBO MODULU
+  // đź”´ RESET STAVU PRI ZMENE USERA ALEBO MODULU
   setModule(null);
   setScenarios([]);
   setProgress([]);
@@ -40,7 +40,7 @@ export default function ModuleDetail() {
       setScenarios(scenariosRes.data || []);
       setProgress(progressRes || []);
     } catch (err) {
-      console.error("❌ Module detail load error:", err);
+      console.error("âťŚ Module detail load error:", err);
     } finally {
       setLoading(false);
     }
@@ -52,7 +52,7 @@ export default function ModuleDetail() {
 
   // ================= GUARDS =================
   if (!user) {
-    return <div className="modules-page">Načítavam…</div>;
+    return <div className="modules-page">Načítavam</div>;
   }
 
   if (loading) {
@@ -85,7 +85,7 @@ if (!module && !loading) {
       <header className="modules-header module-detail-header">
         <div>
           <button className="back-btn" onClick={() => navigate("/modules")}>
-            &lt; Naspäť na moduly
+            &lt; Napäť na moduly
           </button>
 
           <h1 className="modulestitle modulesdetailtitle">
@@ -112,6 +112,7 @@ if (!module && !loading) {
       <div className="modules-track" ref={trackRef}>
         {scenarios.map((s, index) => {
           const status = scenarioStatusMap[s.id];
+          const detailParts = [s.age, s.role].filter(Boolean);
 
           return (
             <div
@@ -143,9 +144,11 @@ if (!module && !loading) {
               {/* TEXT */}
               <div className="module-text-detail">
                 <h3 className="module-title-detail">{s.name}</h3>
-                <p className="module-description-detail">
-                  {s.age}, {s.role}
-                </p>
+                {detailParts.length > 0 && (
+                  <p className="module-description-detail">
+                    {detailParts.join(", ")}
+                  </p>
+                )}
 
                 {s.tags?.length > 0 && (
                   <div className="tags">
@@ -158,11 +161,12 @@ if (!module && !loading) {
                 )}
               </div>
 
-              {/* IMAGE */}
+              {/* IMAGE LOCAL src={`http://localhost:8055/assets/${s.image}`}*/}
               {s.image && (
                 <div className="module-image">
                   <img
-                    src={`http://localhost:8055/assets/${s.image}`}
+                    
+                    src={`${import.meta.env.VITE_DIRECTUS_URL}/assets/${s.image}`}
                     alt={s.name}
                   />
                 </div>
@@ -174,3 +178,5 @@ if (!module && !loading) {
     </div>
   );
 }
+
+

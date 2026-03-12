@@ -8,11 +8,11 @@ import { useAuth } from "../context/AuthContext";
 import micIcon from "../assets/microphone.png";
 
 
-
-const AI_URL = "http://localhost:3001/chat";
+  /*LOCAL const AI_URL = "http://localhost:3001/chat";*/
+const AI_URL = `${import.meta.env.VITE_API_URL}/chat`;
 
 export default function ScenarioDetail({ mobileOpen, setMobileOpen }) {
-  console.log("ScenarioDetail mobileOpen:", mobileOpen);
+  
 
   const { moduleId, scenarioId } = useParams();
   const navigate = useNavigate();
@@ -29,10 +29,13 @@ export default function ScenarioDetail({ mobileOpen, setMobileOpen }) {
 
   const pcRef = useRef(null);
   const audioRef = useRef(null);
+  const localStreamRef = useRef(null);
+  const dataChannelRef = useRef(null);
+  const activeCallTokenRef = useRef(null);
 
   const [inCall, setInCall] = useState(false);
   const [micError, setMicError] = useState(null);
-  /*ukladanie voice do DB - v intevaloch aby bol vždy zapis o tom že sa to stalo ig.*/
+  /*ukladanie voice do DB - v intevaloch aby bol vĹľdy zapis o tom Ĺľe sa to stalo ig.*/
   const messagesRef = useRef([]);
   const hasSavedFinalRef = useRef(false);
   const assistantBufferRef = useRef("");
@@ -44,17 +47,20 @@ export default function ScenarioDetail({ mobileOpen, setMobileOpen }) {
   /*const [mobileOpen, setMobileOpen] = useState(false);*/
   useEffect(() => {
     async function loadScenario() {
+      console.log("Loading scenario:", scenarioId);
       try {
         const res = await api(
           `/items/scenarios/${scenarioId}?fields=id,name,age,role,image,description,tags`
         );
         setScenario(res.data);
+        
       } catch (err) {
         console.error("Scenario load error", err);
       } finally {
         setLoading(false);
       }
     }
+
     loadScenario();
   }, [scenarioId]);
 
@@ -97,7 +103,7 @@ export default function ScenarioDetail({ mobileOpen, setMobileOpen }) {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
-    // okamžite zastavíme – ide nám len o permission
+    // okamĹľite zastavĂ­me â€“ ide nĂˇm len o permission
     stream.getTracks().forEach((t) => t.stop());
 
     return true;
@@ -108,202 +114,261 @@ export default function ScenarioDetail({ mobileOpen, setMobileOpen }) {
   }
 }
 
-  async function startRealtimeCall() {
-    if (pcRef.current) {
-  pcRef.current.close();
-  pcRef.current = null;
-}
+  function teardownRealtimeResources() {
+    activeCallTokenRef.current = null;
 
-    if (isStartingRef.current) return;
-isStartingRef.current = true;
+    const dc = dataChannelRef.current;
+    dataChannelRef.current = null;
+    if (dc) {
+      try {
+        dc.close();
+      } catch {}
+    }
 
-  // 👇 nový permission krok
-  if (!micPermissionAsked) {
-    const ok = await requestMicrophonePermission();
-    setMicPermissionAsked(true);
+    const pc = pcRef.current;
+    pcRef.current = null;
+    if (pc) {
+      try {
+        pc.getSenders().forEach((sender) => sender.track?.stop());
+      } catch {}
+      try {
+        pc.close();
+      } catch {}
+    }
 
-    if (!ok) return;
-  }
+    const localStream = localStreamRef.current;
+    localStreamRef.current = null;
+    if (localStream) {
+      localStream.getTracks().forEach((track) => track.stop());
+    }
 
-  
-  if (inCall) return;
+    const audio = audioRef.current;
+    audioRef.current = null;
+    if (audio?.srcObject) {
+      audio.srcObject.getTracks().forEach((track) => track.stop());
+      audio.srcObject = null;
+    }
+    if (audio) {
+      audio.pause?.();
+    }
 
-  try {
-    // 1️vytvor realtime session
-    const sessionRes = await fetch(
-      "http://localhost:3001/realtime-session",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ scenario_id: scenarioId }),
-      }
-    );
-
-    const session = await sessionRes.json();
-    if (!sessionRes.ok) throw new Error(session.error);
-
-    // 2️WebRTC peer
-    const pc = new RTCPeerConnection();
-    pcRef.current = pc;
-
-    // Data channel pre textové eventy
-    const dc = pc.createDataChannel("oai-events");
-    
-
-
-dc.onmessage = (event) => {
-  const data = JSON.parse(event.data);
-  console.log("Realtime event:", data.type);
-
-  if (data.type?.includes("failed")) {
-  console.log("FAILED EVENT FULL:", data);
-}
-
-  // =========================
-  // reset buffer na začiatku odpovede
-  // =========================
-  if (data.type === "response.created") {
     assistantBufferRef.current = "";
   }
 
-  // =========================
-  // USER TRANSCRIPT
-  // =========================
-  if (data.type === "conversation.item.input_audio_transcription.completed") {
-    const userText = data.transcript;
+  async function cleanupRealtimeCall({ saveFinal = false } = {}) {
+    isStartingRef.current = false;
+    teardownRealtimeResources();
+    setInCall(false);
 
-    setMessages(prev => {
-      const updated = [...prev, { role: "user", content: userText }];
-      messagesRef.current = updated;
-      return updated;
-    });
+    if (saveFinal) {
+      await saveTranscript(true);
+    }
   }
 
-  // =========================
-  // ASSISTANT DELTA STREAM (buffer)
-  // =========================
-  if (data.type === "response.audio_transcript.delta"){
-    const d = data.delta ?? "";
-    if (d.trim().length === 0) return;
-    assistantBufferRef.current += d;
-  }
-
-  // =========================
-  // ASSISTANT TRANSCRIPT DONE → vlož správu
-  // =========================
-  if (data.type === "response.audio_transcript.done")
-{
-    const text = assistantBufferRef.current.trim();
-
-    if (text) {
-      setMessages(prev => {
-        const updated = [...prev, { role: "assistant", content: text }];
-        messagesRef.current = updated;
-        return updated;
+  useEffect(() => {
+    function handleForceStop() {
+      cleanupRealtimeCall({ saveFinal: false }).catch((err) => {
+        console.error("Realtime cleanup error", err);
       });
     }
 
-    assistantBufferRef.current = "";
-  }
+    window.addEventListener("force-stop-realtime", handleForceStop);
+    window.addEventListener("pagehide", handleForceStop);
 
-  // =========================
-  // RESPONSE DONE → ak je feedback, uložiť do DB
-  // =========================
-  if (data.type === "response.done") {
-    const last = messagesRef.current[messagesRef.current.length - 1];
-    if (last?.content?.toLowerCase().includes("spätná väzba:")) {
-      saveTranscript(true);
+    return () => {
+      window.removeEventListener("force-stop-realtime", handleForceStop);
+      window.removeEventListener("pagehide", handleForceStop);
+      handleForceStop();
+    };
+  }, []);
+
+  async function startRealtimeCall() {
+    if (isStartingRef.current) return;
+
+    teardownRealtimeResources();
+    setInCall(false);
+    setMicError(null);
+    isStartingRef.current = true;
+
+    const callToken = Symbol("realtime-call");
+    activeCallTokenRef.current = callToken;
+
+    // đź‘‡ novĂ˝ permission krok
+    if (!micPermissionAsked) {
+      const ok = await requestMicrophonePermission();
+      setMicPermissionAsked(true);
+
+      if (!ok) {
+        isStartingRef.current = false;
+        activeCallTokenRef.current = null;
+        return;
+      }
+    }
+
+    if (inCall) {
+      isStartingRef.current = false;
+      return;
+    }
+
+    try {
+      // 1ď¸Źvytvor realtime session
+      // LOCAL :  "http://localhost:3001/realtime-session",
+      const sessionRes = await fetch(
+        `${import.meta.env.VITE_API_URL}/realtime-session`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ scenario_id: scenarioId }),
+        }
+      );
+
+      const session = await sessionRes.json();
+      if (!sessionRes.ok) throw new Error(session.error);
+      if (activeCallTokenRef.current !== callToken) return;
+
+      // 2ď¸ŹWebRTC peer
+      const pc = new RTCPeerConnection();
+      pcRef.current = pc;
+
+      // Data channel pre textovĂ© eventy
+      const dc = pc.createDataChannel("oai-events");
+      dataChannelRef.current = dc;
+
+      dc.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+
+        if (data.type === "response.created") {
+          assistantBufferRef.current = "";
+        }
+
+        if (data.type === "conversation.item.input_audio_transcription.completed") {
+          const userText = data.transcript;
+
+          setMessages((prev) => {
+            const updated = [...prev, { role: "user", content: userText }];
+            messagesRef.current = updated;
+            return updated;
+          });
+        }
+
+        if (data.type === "response.audio_transcript.delta") {
+          const d = data.delta ?? "";
+          if (d.trim().length === 0) return;
+          assistantBufferRef.current += d;
+        }
+
+        if (data.type === "response.audio_transcript.done") {
+          const text = assistantBufferRef.current.trim();
+
+          if (text) {
+            setMessages((prev) => {
+              const updated = [...prev, { role: "assistant", content: text }];
+              messagesRef.current = updated;
+              return updated;
+            });
+          }
+
+          assistantBufferRef.current = "";
+        }
+
+        if (data.type === "response.done") {
+          const last = messagesRef.current[messagesRef.current.length - 1];
+          const normalizedLast = last?.content
+            ?.toLowerCase()
+            ?.normalize("NFD")
+            ?.replace(/[\u0300-\u036f]/g, "");
+          if (normalizedLast?.includes("spatna vazba:")) {
+            saveTranscript(true);
+          }
+        }
+      };
+
+      // 3ď¸Źaudio vĂ˝stup
+      const audio = document.createElement("audio");
+      audio.autoplay = true;
+      audioRef.current = audio;
+
+      pc.ontrack = async (e) => {
+        if (activeCallTokenRef.current !== callToken) {
+          e.streams[0]?.getTracks().forEach((track) => track.stop());
+          return;
+        }
+
+        audio.srcObject = e.streams[0];
+
+        try {
+          audio.muted = false;
+          audio.volume = 1;
+          await audio.play();
+        } catch (err) {
+          console.error("Audio play blocked:", err);
+        }
+      };
+
+      // 4ď¸Źmic vstup
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+      });
+      localStreamRef.current = stream;
+
+      if (activeCallTokenRef.current !== callToken) {
+        stream.getTracks().forEach((track) => track.stop());
+        return;
+      }
+
+      stream.getTracks().forEach((track) => pc.addTrack(track, stream));
+
+      // 5ď¸ŹSDP offer
+      const offer = await pc.createOffer();
+      await pc.setLocalDescription(offer);
+
+      // NEW â€” proxy cez backend (bez CORS)
+      const sdpRes = await fetch(
+        `${import.meta.env.VITE_API_URL}/realtime-connect?model=${session.model}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/sdp",
+            Authorization: `Bearer ${session.client_secret.value}`,
+          },
+          body: offer.sdp,
+        }
+      );
+
+      const sdpText = await sdpRes.text();
+      if (!sdpRes.ok) throw new Error(sdpText);
+      if (activeCallTokenRef.current !== callToken) return;
+
+      const answer = {
+        type: "answer",
+        sdp: sdpText,
+      };
+
+      await pc.setRemoteDescription(answer);
+      if (activeCallTokenRef.current !== callToken) return;
+
+      setInCall(true);
+      hasSavedFinalRef.current = false;
+    } catch (err) {
+      console.error("Ă˘ĹĄĹš Realtime start error:", err);
+      setMicError(err?.message || "Nepodarilo sa spustiť mikrofón");
+      teardownRealtimeResources();
+      setInCall(false);
+    } finally {
+      isStartingRef.current = false;
     }
   }
-};
-
-
-
-
-    // 3️audio výstup
-    const audio = document.createElement("audio");
-    audio.autoplay = true;
-    audioRef.current = audio;
-
-    pc.ontrack = async (e) => {
-      console.log("🎧 Audio track received");
-
-      audio.srcObject = e.streams[0];
-
-      try {
-        audio.muted = false;
-        audio.volume = 1;
-        await audio.play();
-        console.log("▶ Audio playing");
-      } catch (err) {
-        console.error("Audio play blocked:", err);
-      }
-    };
-
-
-    // 4️mic vstup
-    const stream = await navigator.mediaDevices.getUserMedia({
-      audio: true,
-    });
-
-    stream.getTracks().forEach((track) =>
-      pc.addTrack(track, stream)
-    );
-
-    // 5️SDP offer
-    const offer = await pc.createOffer();
-    await pc.setLocalDescription(offer);
-
-    // 6️pošli SDP priamo OpenAI `https://api.openai.com/v1/realtime?model=${session.model}`,
-    const sdpRes = await fetch(
-      `https://api.openai.com/v1/realtime`,
-      {
-        method: "POST",
-        body: offer.sdp,
-        headers: {
-          Authorization: `Bearer ${session.client_secret.value}`,
-          "Content-Type": "application/sdp",
-        },
-      }
-    );
-
-    const answer = {
-      type: "answer",
-      sdp: await sdpRes.text(),
-    };
-
-    await pc.setRemoteDescription(answer);
-
-
-    setInCall(true);
-    isStartingRef.current = false;
-
-
-    // reset flag
-    hasSavedFinalRef.current = false;
-
-    
-
-  } catch (err) {
-  console.error("❌ Realtime start error:", err);
-  setMicError(err?.message || "Nepodarilo sa spustiť mikrofón");
-  isStartingRef.current = false;
-
-  }
-
-}
-  // 🔥 ULOŽENIE TRANSCRIPTU (autosave + final)
   async function saveTranscript(isFinal = false) {
     try {
       if (!messagesRef.current.length) return;
 
-      // ❗ iba finálny save má ísť do DB
+      // âť— iba finĂˇlny save mĂˇ Ă­sĹĄ do DB
       if (!isFinal) return;
 
-      // zabráni dvojitému zápisu
+      // zabrĂˇni dvojitĂ©mu zĂˇpisu
       if (hasSavedFinalRef.current) return;
-
-      await fetch("http://localhost:3001/save-realtime-transcript", {
+// LOCAL : await fetch("http://localhost:3001/save-realtime-transcript"
+      await fetch(`${import.meta.env.VITE_API_URL}/save-realtime-transcript`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -323,24 +388,10 @@ dc.onmessage = (event) => {
 
 
   function stopRealtimeCall() {
-  pcRef.current?.close();
-  pcRef.current = null;
-
-  if (audioRef.current?.srcObject) {
-    audioRef.current.srcObject
-      .getTracks()
-      .forEach((t) => t.stop());
+    cleanupRealtimeCall({ saveFinal: true }).catch((err) => {
+      console.error("Realtime stop error", err);
+    });
   }
-
-  setInCall(false);
-
-
-  // finálne uloženie
-  saveTranscript(true);
-}
-
-
-
   if (loading || !scenario) return null;
 
   return (
@@ -360,7 +411,7 @@ dc.onmessage = (event) => {
           className="scenario-back"
           onClick={() => navigate(`/modules/${moduleId}`)}
         >
-          ← Späť
+          &lt; Späť na scenáre
         </button>
 
         <ScenarioCard scenario={scenario} showDescription />
@@ -373,7 +424,7 @@ dc.onmessage = (event) => {
             className="scenario-back"
             onClick={() => navigate(`/modules/${moduleId}`)}
           >
-            &lt; Naspäť na scenáre
+            &lt; Späť na scenáre
           </button>
 
           <ScenarioCard scenario={scenario} showDescription />
@@ -401,20 +452,20 @@ dc.onmessage = (event) => {
           />
 
           <button onClick={sendMessage} disabled={sending}>
-            {sending ? "AI odpovedá…" : "Odoslať"}
+            {sending ? "AI odpovedĂˇâ€¦" : "OdoslaĹĄ"}
           </button>
            */}
            <div className="voice-controls">
 
-  {/* INFO pred prvým povolením mikrofónu */}
+  {/* INFO pred prvĂ˝m povolenĂ­m mikrofĂłnu */}
 {micError && (
   <div className="mic-hint-pristup">
-    Aplikácia potrebuje prístup k mikrofónu.
+    Aplikácia potrebuje prítup k mikrofónu.
   </div>
 )}
 
 
-  {/* HLAVNÝ KRUHOVÝ BUTTON */}
+  {/* HLAVNĂť KRUHOVĂť BUTTON */}
   <div className="mic-wrapper">
   <button
     className={`mic-button ${inCall ? "active" : ""}`}
@@ -425,7 +476,7 @@ dc.onmessage = (event) => {
       <span className="mic-text">
       {inCall ? (
         <>
-          Ukončiť <br /> rozhovor
+          Ukončiť<br /> rozhovor
         </>
       ) : (
         <>
@@ -440,7 +491,7 @@ dc.onmessage = (event) => {
   {!inCall && (
     <div className="mic-hint-text">
 
-      Po stlačení mikrofónu sa spustí voice chat.
+      Po stlačení mikrofónu sa spusti­ voice chat.
       Začnite ho pozdravom.
     </div>
   )}

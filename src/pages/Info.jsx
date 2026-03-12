@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
  // API zmena !!!: const API_URL = "http://localhost:8055";
+ // API zmena na deploy !!!: const API_URL = import.meta.env.VITE_DIRECTUS_URL;
 const API_URL = import.meta.env.VITE_DIRECTUS_URL;
 
 

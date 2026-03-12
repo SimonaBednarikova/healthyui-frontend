@@ -1,13 +1,15 @@
-export default function ScenarioCard({
+﻿export default function ScenarioCard({
   scenario,
   index,
   status,
   showDescription = false,
 }) {
+  const detailParts = [scenario.age, scenario.role].filter(Boolean);
+
   function formatDescription(text) {
   if (!text) return null;
 
-  const marker = "Tvoja úloha";
+  const marker = "Vaša úloha";
 
   if (!text.includes(marker)) {
     return <p className="scenario-description">{text}</p>;
@@ -16,7 +18,7 @@ export default function ScenarioCard({
   const [before, afterRaw] = text.split(marker);
 
   const after = afterRaw
-    ?.replace(/^[:\-\s]*/, "") // odstráni prípadnú dvojbodku, pomlčku, medzery
+    ?.replace(/^[:\-\s]*/, "") 
     .trim();
 
   return (
@@ -55,9 +57,11 @@ export default function ScenarioCard({
       <div className="module-text-detail">
         <h3 className="module-title-detail">{scenario.name}</h3>
 
-        <p className="module-description-detail">
-          {scenario.age}, {scenario.role}
-        </p>
+        {detailParts.length > 0 && (
+          <p className="module-description-detail">
+            {detailParts.join(", ")}
+          </p>
+        )}
         {scenario.tags?.length > 0 && (
           <div className="tags">
             {scenario.tags.map((tag, i) => (
@@ -75,11 +79,12 @@ export default function ScenarioCard({
         
       </div>
 
-      {/* IMAGE */}
+      {/* IMAGE LOCAL = src={`http://localhost:8055/assets/${scenario.image}`}*/}
       {scenario.image && (
         <div className="card-image">
           <img
-            src={`http://localhost:8055/assets/${scenario.image}`}
+           
+            src={`${import.meta.env.VITE_DIRECTUS_URL}/assets/${scenario.image}`}
             alt={scenario.name}
           />
         </div>
@@ -87,3 +92,5 @@ export default function ScenarioCard({
     </div>
   );
 }
+
+

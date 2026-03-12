@@ -12,9 +12,11 @@ function ResetPassword() {
   async function handleSubmit(e) {
     e.preventDefault();
     setError(null);
-
+/* ======================
+ LOCAL riadok 19: "http://localhost:8055/auth/password/reset",
+====================== */
     const res = await fetch(
-      "http://localhost:8055/auth/password/reset",
+      `${import.meta.env.VITE_DIRECTUS_URL}/auth/password/reset`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

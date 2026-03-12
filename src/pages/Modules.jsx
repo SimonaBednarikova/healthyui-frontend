@@ -125,11 +125,11 @@ const modulesProgress = progress?.modules ?? {};
                   {m.description}
                 </p>
               </div>
-
+              {/*LOCAL src={`http://localhost:8055/assets/${m.image}`} */}
               <div className="module-image">
                 {m.image && (
                   <img
-                    src={`http://localhost:8055/assets/${m.image}`}
+                    src={`${import.meta.env.VITE_DIRECTUS_URL}/assets/${m.image}`}
                     alt={m.title}
                   />
                 )}

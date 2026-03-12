@@ -52,19 +52,19 @@ export default function ModuleDetail() {
 
   // ================= GUARDS =================
   if (!user) {
-    return <div className="modules-page">Načítavam</div>;
+    return <div className="modules-page module-detail-page">Načítavam</div>;
   }
 
   if (loading) {
-    return <div className="modules-page">Načítavam modul…</div>;
+    return <div className="modules-page module-detail-page">Načítavam modul…</div>;
   }
 
   if (loading) {
-  return <div className="modules-page">Načítavam modul…</div>;
+  return <div className="modules-page module-detail-page">Načítavam modul…</div>;
 }
 
 if (!module && !loading) {
-  return <div className="modules-page">Modul neexistuje</div>;
+  return <div className="modules-page module-detail-page">Modul neexistuje</div>;
 }
 
 
@@ -80,7 +80,7 @@ if (!module && !loading) {
 
   // ================= RENDER =================
   return (
-    <div className="modules-page">
+    <div className="modules-page module-detail-page">
       {/* ================= HEADER ================= */}
       <header className="modules-header module-detail-header">
         <div>
@@ -178,5 +178,6 @@ if (!module && !loading) {
     </div>
   );
 }
+
 
 

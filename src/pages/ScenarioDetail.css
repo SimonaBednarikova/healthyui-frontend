@@ -1,4 +1,4 @@
-/* =========================
+﻿/* =========================
    PAGE WRAPPER
 ========================= */
 
@@ -28,8 +28,8 @@
     cursor: pointer;
     font-size: 12px;
 
-  display: inline-flex;      /* 🔑 kľúčové */
-  align-self: flex-start;    /* 🔑 kľúčové */
+  display: inline-flex;      /* đź”‘ kÄľĂşÄŤovĂ© */
+  align-self: flex-start;    /* đź”‘ kÄľĂşÄŤovĂ© */
 
   margin-bottom: 24px;
 }
@@ -154,7 +154,7 @@ p{
 
   object-position: center top;
 
-  max-height: 480px;        /* 🔑 TOTO ZMENŠUJE KARTU */
+  max-height: 480px;        /* đź”‘ TOTO ZMENĹ UJE KARTU */
   object-fit: cover;
 
   border-radius: 24px 24px 24px 24px !important;
@@ -168,14 +168,14 @@ p{
 
 
 /* =========================
-   RIGHT PANEL – VOICE
+   RIGHT PANEL â€“ VOICE
 ========================= */
 
 .scenario-voice {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center; /* 🔑 vertikálne centrovanie */
+  justify-content: center; /* đź”‘ vertikĂˇlne centrovanie */
 
   text-align: center;
   max-width: 500px;
@@ -234,7 +234,7 @@ p{
   transition: transform 0.2s ease;
 }
 .mic-icon-img {
-  width: 90px;   /* tu riadiš veľkosť */
+  width: 90px;   /* tu riadiĹˇ veÄľkosĹĄ */
   height: auto;
 }
 
@@ -321,7 +321,7 @@ p{
 ========================= */
 
 .scenario-back {
-  /* toto je tvoj pôvodný .scenario-page > button, len konkrétnejšie */
+  /* toto je tvoj pĂ´vodnĂ˝ .scenario-page > button, len konkrĂ©tnejĹˇie */
   font-family: "Agrandir", sans-serif;
   margin-top: 80px;
   width: auto;
@@ -368,12 +368,12 @@ p{
     padding: 0px !important;
   }
   /* -------------------------
-     ZÁKLADNÝ LAYOUT
+     ZĂKLADNĂť LAYOUT
   ------------------------- */
 
 
   .scenario-layout {
-    display: block; /* zruší desktop grid */
+    display: block; /* zruĹˇĂ­ desktop grid */
   }
 
   .desktop-only {
@@ -382,15 +382,15 @@ p{
 
   /* -------------------------
      BURGER BUTTON
-     (viditeľný vždy, aj keď drawer je zatvorený)
+     (viditeÄľnĂ˝ vĹľdy, aj keÄŹ drawer je zatvorenĂ˝)
   ------------------------- */
 
  
-  /* keď je drawer otvorený, burger schovaj */
+  /* keÄŹ je drawer otvorenĂ˝, burger schovaj */
 
 
   /* -------------------------
-     DRAWER (KARTA SCENÁRA)
+     DRAWER (KARTA SCENĂRA)
   ------------------------- */
 
   .scenario-drawer {
@@ -432,7 +432,7 @@ p{
  
   }
   .drawer-toggle {
-    z-index: 500; /* MUSÍ BYŤ NAD HEADEROM */
+    z-index: 500; /* MUSĂŤ BYĹ¤ NAD HEADEROM */
   }
   header,
   .app-header {
@@ -487,3 +487,133 @@ p{
   margin-bottom: 0px;
 }
 
+
+
+@media (max-width: 768px) {
+  .scenario-drawer .tags {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 8px;
+    row-gap: 6px;
+    margin: 0 0 18px;
+    padding-top: 0;
+  }
+
+  .scenario-drawer .tag {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    background: #ffffff;
+    border: 1px solid #111827;
+    border-radius: 999px;
+    padding: 3px 12px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #111827;
+  }
+
+  .scenario-drawer .scenario-description {
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .scenario-drawer .scenario-back {
+    margin-left: 16px;
+    margin-bottom: 18px;
+  }
+
+  .scenario-drawer .module-title-detail,
+  .scenario-drawer .module-description-detail,
+  .scenario-drawer .tags,
+  .scenario-drawer .scenario-description,
+  .scenario-drawer .task-section {
+    margin-left: 16px;
+    margin-right: 16px;
+  }
+
+  .scenario-drawer .tag,
+  .scenario-drawer .tag span {
+    text-align: center;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .scenario-drawer {
+    padding: 12px 8px;
+  }
+
+  .scenario-drawer .scenario-back,
+  .scenario-drawer .module-title-detail,
+  .scenario-drawer .module-description-detail,
+  .scenario-drawer .tags,
+  .scenario-drawer .scenario-description,
+  .scenario-drawer .task-section {
+    margin-left: 8px;
+    margin-right: 8px;
+  }
+
+  .scenario-drawer .scenario-description,
+  .scenario-drawer .task-section {
+    font-size: 16px;
+    line-height: 1.28;
+    padding: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .scenario-drawer .scenario-description p,
+  .scenario-drawer .task-section p {
+    margin: 0;
+    padding: 0;
+  }
+
+  .scenario-drawer .task-section strong {
+    margin-bottom: 4px;
+  }
+}
+
+.mic-button {
+  background: #2b19c8;
+}
+
+.mic-button:hover {
+  background: #ffd6e0;
+}
+
+.mic-button.active {
+  background: #e2004f;
+  animation: pulse-red 2.5s infinite;
+}
+
+@keyframes pulse-red {
+  0% { box-shadow: 0 0 0 0 rgba(226, 0, 79, 0.45); }
+  30% { box-shadow: 0 0 0 20px rgba(226, 0, 79, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(226, 0, 79, 0); }
+}
+
+
+@media (max-width: 768px) {
+  .scenario-drawer .tags {
+    column-gap: 8px;
+    row-gap: 2px;
+    margin: 0 8px 14px;
+  }
+}
+
+
+.mic-button {
+  background: #2b19c8;
+  border: 2px solid #2b19c8;
+}
+
+.mic-button:hover {
+  background: #2b19c8;
+  border-color: #2b19c8;
+}
+
+.mic-button.active {
+  background: #e2004f;
+  border-color: #e2004f;
+}

@@ -1,4 +1,4 @@
-import "./Modules.css";
+﻿import "./Modules.css";
 import { useNavigate } from "react-router-dom";
 import { useRef, useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
@@ -22,22 +22,22 @@ export default function Modules() {
   const trackRef = useRef(null);
   
 
-  // ⏳ čakáme na auth
-  if (loading) return <div>…</div>;
+  // âŹł ÄŤakĂˇme na auth
+  if (loading) return <div>â€¦</div>;
   if (!user) return null;
 
-  // 1️⃣ načítaj moduly
+  // 1ď¸ŹâŁ naÄŤĂ­taj moduly
   useEffect(() => {
     api("/items/modules")
       .then((res) => {
         setModules(res.data || []);
       })
       .catch((err) =>
-        console.error("❌ Error loading modules:", err)
+        console.error("âťŚ Error loading modules:", err)
       );
   }, []);
 
-  // 2️⃣ načítaj progress z Flow
+  // 2ď¸ŹâŁ naÄŤĂ­taj progress z Flow
 useEffect(() => {
   if (!user?.id) return;
 
@@ -46,7 +46,7 @@ useEffect(() => {
       setProgress(data);
     })
     .catch((err) =>
-      console.error("❌ Error loading progress:", err)
+      console.error("âťŚ Error loading progress:", err)
     );
 }, [user.id]);
 
@@ -67,7 +67,7 @@ const modulesProgress = progress?.modules ?? {};
   }
 
   return (
-    <div className="modules-page">
+    <div className="modules-page modules-overview-page">
       {/* ================= HEADER ================= */}
       <header className="modules-header">
         <h1 className="modulestitle">Moduly</h1>
@@ -151,3 +151,4 @@ const modulesProgress = progress?.modules ?? {};
     </div>
   );
 }
+

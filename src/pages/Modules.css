@@ -1,5 +1,5 @@
-/* =========================
-   STRÁNKA
+﻿/* =========================
+   STRĂNKA
 ========================= */
 .modules-page {
   background: white;
@@ -31,7 +31,7 @@
 }
 
 /* =========================
-   CELKOVÝ PROGRESS KURZU
+   CELKOVĂť PROGRESS KURZU
 ========================= */
 .course-progress {
   display: flex;
@@ -67,7 +67,7 @@
   
 }
 .course-progress-fill,
-.module-progress-fill {
+.modules-page .module-progress-fill {
   transition: width 900ms ease-out;
 }
 
@@ -81,7 +81,7 @@
   gap: 24px;
   padding-left: 64px;
   padding-right: 64px;
-  overflow-x: auto;        /* povolí touchpad */
+  overflow-x: auto;        /* povolĂ­ touchpad */
   overflow-y: hidden;
   scroll-behavior: smooth;
   scrollbar-width: none;  /* Firefox */
@@ -96,7 +96,7 @@
 
 
 .module-text {
-  height: 210px;              /* ⬅KĽÚČOVÉ pre vysku a viditelnost textu, ak dlhsie texty upravit tu*/
+  height: 210px;              /* â¬…KÄ˝ĂšÄŚOVĂ‰ pre vysku a viditelnost textu, ak dlhsie texty upravit tu*/
   display: flex;;
   flex-direction: column;
 }
@@ -115,7 +115,7 @@
   line-clamp: 2;
   overflow: hidden;
   margin-top: 10px;
-  min-height: calc(1.1em * 2); /* ⬅KĽÚČOVÉ aby popisy zacinali na rovnakej vyske */
+  min-height: calc(1.1em * 2); /* â¬…KÄ˝ĂšÄŚOVĂ‰ aby popisy zacinali na rovnakej vyske */
 }
 
 .moduledescriptiontext{
@@ -124,7 +124,7 @@
 }
 
 
-.module-description {
+.modules-page .module-description {
   font-size: 17px;
 
   letter-spacing: 0.5px;
@@ -145,7 +145,7 @@
 /* =========================
    KARTA MODULU
 ========================= */
-.module-card {
+.modules-page .module-card {
   flex: 0 0 350px;
   background: #ffefed;
   border-radius: 28px;
@@ -155,7 +155,7 @@
   cursor: pointer;
   transition: background 0.2s ease;
   overflow: hidden;
-  height: 600px; /* ⬅KĽÚČOVÉ pre vysku karty */
+  height: 600px; /* â¬…KÄ˝ĂšÄŚOVĂ‰ pre vysku karty */
   box-shadow: 0 20px 20px rgba(0, 0, 0, 0.15);
 }
 
@@ -174,14 +174,14 @@
   cursor: pointer;
   transition: background 0.2s ease;
   overflow: hidden;
-  height: auto; /* ⬅KĽÚČOVÉ pre vysku karty */
+  height: auto; /* â¬…KÄ˝ĂšÄŚOVĂ‰ pre vysku karty */
    /*box-shadow: 0 20px 20px rgba(0, 0, 0, 0.15);*/
 }
 
 /* =========================
-   HORNÝ RIADOK KARTY
+   HORNĂť RIADOK KARTY
 ========================= */
-.module-top {
+.modules-page .module-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -189,7 +189,7 @@
  
 }
 
-.module-index {
+.modules-page .module-index {
   width: 28px;
   height: 27px;
   border-radius: 50%;
@@ -210,7 +210,7 @@
 /* =========================
    PROGRESS V KARTE
 ========================= */
-.module-progress-bar {
+.modules-page .module-progress-bar {
   width: 120px;
   height: 28px;
   background: #ffd6e0;
@@ -219,7 +219,7 @@
   box-shadow: 0 8px 8px rgba(0, 0, 0, 0.10);
 }
 
-.module-progress-fill {
+.modules-page .module-progress-fill {
   height: 100%;
   background: #d6004c;
   border-radius: 999px;
@@ -230,7 +230,7 @@
   min-width: 44px; /* aby percento nezmizlo */
 }
 
-.module-progress-fill span {
+.modules-page .module-progress-fill span {
   color: white;
   font-size: 12px;
   font-weight: 600;
@@ -238,12 +238,12 @@
 }
 
 /* =========================
-   OBRÁZOK (OD KRAJA PO KRAJ)
+   OBRĂZOK (OD KRAJA PO KRAJ)
 ========================= */
 
 .module-image {
   margin: 0 -24px;
-  flex-grow: 1; /* ⬅ KĽÚČOVÉ */
+  flex-grow: 1; /* â¬… KÄ˝ĂšÄŚOVĂ‰ */
   display: flex;
   border-radius: 28px 28px 28px 28px;
 }
@@ -258,7 +258,7 @@
 
 
 /* =========================
-   NAVIGÁCIA ← →
+   NAVIGĂCIA â† â†’
 ========================= */
 .modules-nav-btn {
   width: 44px;
@@ -273,7 +273,7 @@
   font-family: "Agrandir", sans-serif;
   font-size: 36px;
   font-weight: 500;
-  line-height: 1;              /* kľúčové */
+  line-height: 1;              /* kÄľĂşÄŤovĂ© */
   padding: 0;
   margin-top: 0px;
   
@@ -321,7 +321,7 @@
   margin-bottom: 15px;
 }
 
-.tag {
+.modules-page .tag {
   background: white;
   border: 1px solid black;
   border-radius: 999px;
@@ -430,7 +430,7 @@
   margin-bottom: 16px;
   margin-top: 16px;
 }
-.scenario-status {
+.modules-page .scenario-status {
   width: 60px;
   height: 30px;
   background: #ffe3ea;
@@ -444,7 +444,7 @@
 
 
 
-.scenario-status-fill {
+.modules-page .scenario-status-fill {
   width: 28px;
   height: 28px;
   border-radius: 100%;
@@ -459,7 +459,7 @@
   background: #d6004c;
 }
 
-.scenario-status-fill.done {
+.modules-page .scenario-status-fill.done {
   background: #d6004c;
 }
 
@@ -468,7 +468,7 @@
   color: #d6004c;
   transform: translateX(0);
 }
-.scenario-status-fill.done {
+.modules-page .scenario-status-fill.done {
   background: white;
   color: #d6004c;
   transform: translateX(30px);
@@ -481,7 +481,7 @@
   position: relative;
 }
 
-/* pravý fade overlay */
+/* pravĂ˝ fade overlay */
 .modules-page::after {
   content: "";
   position: fixed;
@@ -527,8 +527,8 @@
 
 
 /* =========================
-   MODULE DETAIL – SCENÁRE
-   (NEOVPLYVŇUJE MODULY)
+   MODULE DETAIL â€“ SCENĂRE
+   (NEOVPLYVĹ‡UJE MODULY)
 ========================= */
 
 .module-text-detail {
@@ -542,12 +542,12 @@
   line-height: 1;
   margin-top: 0px;
   margin-bottom: 10px;
-  min-height: unset;         /* ⬅kľúčové */
+  min-height: unset;         /* â¬…kÄľĂşÄŤovĂ© */
   -webkit-line-clamp: 1;
   line-clamp: 1;
 }
 
-.module-description-detail {
+.modules-page .module-description-detail {
   margin-top: 0px;
   margin-bottom: 10px;
   font-size: 18px;
@@ -557,7 +557,7 @@
 .module-detail .tags {
   margin-top: 8px;
 }
-p.tag {
+.modules-page p.tag {
   margin-top: 0;
 }
 div.tags {
@@ -565,37 +565,789 @@ div.tags {
 }
 
 @media (max-width: 768px) {
-  .module-detail-header h1{
+  .modules-page {
+    padding: 32px 0 40px;
+  }
+
+  .modules-page::after {
+    display: none;
+  }
+
+  .modules-overview-page .modules-header {
+    padding: 0 20px;
+    margin-bottom: 20px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .modules-overview-page .modulestitle {
+    margin: 0;
+    padding: 0;
     font-size: 30px;
-    margin-bottom: 35px;
+    line-height: 0.95;
+    letter-spacing: 0;
   }
-  .module-detail-header .course-progress-bar {
+
+  .modules-overview-page .course-progress {
+    margin-left: auto;
     transform: none;
-    margin-top: 20px;
   }
-  .modules-track{
-    padding-top: 20px;
-    padding-left: 34px;
+
+  .modules-overview-page .course-progress-bar {
+    width: 120px;
+    height: 28px;
+    transform: none;
+    margin-top: 0;
   }
-  .modulestitle {
-        margin: 0;
-        padding-bottom: 0px; 
+
+  .modules-overview-page .course-progress-fill span {
+    font-size: 12px;
+    transform: none;
   }
-  .module-detail-header h1 {
-        font-size: 30px;
-        margin-bottom: 0px;
-        font-size: 38px;
-    }
-    .moduledescriptiontext {
+
+  .modules-overview-page .modules-track {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px 20px 24px;
+    overflow: visible;
+  }
+
+  .modules-overview-page .modules-nav {
+    display: none;
+  }
+
+  .modules-overview-page .module-card {
+    position: relative;
+    width: 100%;
+    flex: none;
+    height: auto;
+    min-height: 0;
+    padding: 14px;
+    border-radius: 22px;
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr);
+    gap: 0 14px;
+    align-items: start;
+    box-shadow: none;
+    background: #ffefed;
+  }
+
+  .modules-overview-page .module-top {
+    margin-bottom: 0;
+  }
+
+  .modules-overview-page .module-index {
+    display: none;
+  }
+
+  .modules-overview-page .module-progress-bar {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 72px;
+    height: 22px;
+    margin: 0;
+    box-shadow: none;
+  }
+
+  .modules-overview-page .module-progress-fill {
+    min-width: 34px;
+    padding-right: 8px;
+  }
+
+  .modules-overview-page .module-progress-fill span {
+    font-size: 10px;
+    transform: none;
+  }
+
+  .modules-overview-page .module-image {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    width: 96px;
+    height: 96px;
+    margin: 0;
+    flex-grow: 0;
+    align-self: center;
+  }
+
+  .modules-overview-page .module-image img {
+    width: 100%;
+    height: 100%;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 16px !important;
+  }
+
+  .modules-overview-page .module-text {
+    grid-column: 2;
+    min-width: 0;
+    height: auto;
+    padding: 0;
+    padding-right: 86px;
+    gap: 4px;
+  }
+
+  .modules-overview-page .module-title {
+    font-size: 20px;
+    line-height: 0.95;
+    margin: 0 0 8px;
+    min-height: 0;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+  }
+
+  .modules-overview-page .module-description {
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.2;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+  }
+
+  .module-detail-page .module-detail-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "back progress"
+      "title title"
+      "intro intro";
+    align-items: start;
+    gap: 12px 16px;
+    padding: 0 20px;
+    margin-bottom: 24px;
+  }
+
+  .module-detail-page .module-detail-header > div:first-child {
+    display: contents;
+  }
+
+  .module-detail-page .back-btn {
+    grid-area: back;
+    margin-top: 0;
+    margin-bottom: 18px;
+  }
+
+  .module-detail-page .module-detail-header h1 {
+    grid-area: title;
+    margin: 0 0 14px;
+    padding: 0;
+    font-size: 30px;
+    line-height: 0.95;
+    letter-spacing: 0;
+  }
+
+  .module-detail-page .moduledescriptiontext {
+    grid-area: intro;
     max-width: 100%;
-}
-.back-btn {
-  margin-top: 0px;
-}
-.p{
-  margin-bottom: 50px;
+    margin-top: 0;
+  }
+
+  .module-detail-page .module-detail-header .course-progress {
+    grid-area: progress;
+    margin: 0;
+    transform: none;
+    align-self: start;
+  }
+
+  .module-detail-page .module-detail-header .course-progress-bar {
+    width: 120px;
+    height: 28px;
+    transform: none;
+    margin-top: 0;
+  }
+
+
+  .module-detail-page .modules-track {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 8px 20px 24px;
+    overflow: visible;
+  }
+
+  .module-detail-page .module-card {
+    position: relative;
+    width: 100%;
+    flex: none;
+    height: auto;
+    min-height: 0;
+    padding: 14px;
+    border-radius: 22px;
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr);
+    gap: 0 14px;
+    align-items: start;
+    box-shadow: none;
+  }
+
+  .module-detail-page .module-top {
+    margin-bottom: 0;
+  }
+
+  .module-detail-page .module-index {
+    display: none;
+  }
+
+  .module-detail-page .scenario-status {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 54px;
+    height: 24px;
+    margin: 0;
+    box-shadow: none;
+  }
+
+  .module-detail-page .scenario-status-fill {
+    width: 22px;
+    height: 22px;
+    font-size: 13px;
+  }
+
+  .module-detail-page .scenario-status-fill.done {
+    transform: translateX(30px);
+  }
+
+  .module-detail-page .module-image {
+    grid-column: 1;
+    grid-row: 1 / span 3;
+    width: 96px;
+    height: 110px;
+    margin: 0;
+    flex-grow: 0;
+    align-self: center;
+  }
+
+  .module-detail-page .module-image img {
+    width: 100%;
+    height: 100%;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 16px !important;
+  }
+
+  .module-detail-page .module-text-detail {
+    grid-column: 2;
+    min-width: 0;
+    height: auto;
+    padding: 0;
+    padding-right: 74px;
+    gap: 4px;
+  }
+
+  .module-detail-page .module-title-detail {
+    font-size: 20px;
+    line-height: 0.95;
+    margin: 0 0 6px;
+    min-height: 0;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+  }
+
+  .module-detail-page .module-description-detail {
+    margin: 0 0 4px;
+    font-size: 14px;
+    line-height: 1.25;
+  }
+
+  .module-detail-page .tags,
+  .module-detail-page div.tags {
+    padding-top: 0;
+    margin: 0 0 6px;
+    column-gap: 6px;
+    row-gap: 2px;
+  }
+
+  .module-detail-page .tag {
+    width: fit-content;
+    font-size: 13px;
+    padding: 2px 8px;
+  }
+
+  .module-detail-page .scenario-description {
+    margin-top: 0;
+    margin-bottom: 0 !important;
+    font-size: 14px;
+    line-height: 1.35;
+  }
+
+  .module-detail-page .task-section {
+    margin-top: 8px;
+    padding-top: 0;
+  }
 }
 
+
+
+
+
+@media (max-width: 768px) {
+  .modules-page .tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .modules-page .tag span {
+    display: block;
+    width: 100%;
+    text-align: center;
+  }
+
+  .module-detail-page .back-btn {
+    justify-self: start;
+  }
+
+  .module-detail-page .tags,
+  .module-detail-page div.tags {
+    margin: 0 0 4px;
+    column-gap: 6px;
+    row-gap: 0;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 768px) {
+  .modules-overview-page .module-card {
+    grid-template-areas:
+      "image title"
+      "desc desc";
+    row-gap: 10px;
+  }
+
+  .modules-overview-page .module-text {
+    display: contents;
+  }
+
+  .modules-overview-page .module-title {
+    grid-area: title;
+    padding-right: 86px;
+    margin: 0;
+    overflow: visible;
+    display: block;
+    -webkit-line-clamp: unset;
+    line-clamp: unset;
+  }
+
+  .modules-overview-page .module-description {
+    grid-area: desc;
+    width: 100%;
+    max-width: none;
+    margin-top: 0;
+    padding-right: 0;
+    overflow: visible;
+    display: block;
+    -webkit-line-clamp: unset;
+    line-clamp: unset;
+  }
+
+  .modules-overview-page .module-image,
+  .module-detail-page .module-image {
+    overflow: hidden;
+    border-radius: 16px;
+    background: transparent;
+  }
+
+  .modules-overview-page .module-image img,
+  .module-detail-page .module-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+
+  .module-detail-page .module-detail-header {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+  }
+
+  .module-detail-page .module-detail-header > div:first-child {
+    display: grid;
+    grid-template-areas:
+      "back"
+      "title"
+      "intro";
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .module-detail-page .back-btn {
+    justify-self: start;
+    align-self: start;
+    margin: 0 0 18px;
+  }
+
+  .module-detail-page .module-card {
+    grid-template-areas:
+      "image title"
+      "image meta"
+      "tags tags"
+      "desc desc";
+    row-gap: 6px;
+  }
+
+  .module-detail-page .module-top,
+  .module-detail-page .module-text-detail {
+    display: contents;
+  }
+
+  .module-detail-page .module-title-detail {
+    grid-area: title;
+    padding-right: 74px;
+    margin: 0;
+    overflow: visible;
+    display: block;
+    -webkit-line-clamp: unset;
+    line-clamp: unset;
+  }
+
+  .module-detail-page .module-description-detail {
+    grid-area: meta;
+    padding-right: 74px;
+    margin: 0;
+  }
+
+  .module-detail-page .tags,
+  .module-detail-page div.tags {
+    grid-area: tags;
+    width: 100%;
+    margin: 0 0 4px;
+    column-gap: 6px;
+    row-gap: 4px;
+  }
+
+  .module-detail-page .scenario-description {
+    grid-area: desc;
+    width: 100%;
+    max-width: none;
+  }
+
+  .module-detail-page .tag,
+  .modules-overview-page .tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    line-height: 1.15;
+    width: fit-content;
+  }
+}
+
+@media (max-width: 768px) {
+  .module-detail-page .module-detail-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 16px;
+    align-items: start;
+  }
+
+  .module-detail-page .module-detail-header > div:first-child {
+    display: contents;
+  }
+
+  .module-detail-page .back-btn {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: start;
+    margin: 0 0 12px;
+  }
+
+  .module-detail-page .module-detail-header .course-progress {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+    margin: 0;
+  }
+
+  .module-detail-page .module-detail-header h1 {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    margin: 0 0 10px;
+    max-width: none;
+    width: 100%;
+  }
+
+  .module-detail-page .moduledescriptiontext {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    max-width: none;
+    width: 100%;
+    margin: 0;
+  }
+
+  .modules-overview-page .module-card,
+  .module-detail-page .module-card {
+    position: relative;
+    overflow: hidden;
+    grid-template-columns: 132px minmax(0, 1fr);
+    column-gap: 16px;
+    row-gap: 0;
+    padding: 0 14px 0 0;
+    align-items: stretch;
+  }
+
+  .modules-overview-page .module-image,
+  .module-detail-page .module-image {
+    grid-column: 1;
+    grid-row: 1;
+    width: 132px;
+    height: auto;
+    min-height: 132px;
+    margin: 0;
+    align-self: stretch;
+    overflow: hidden;
+    border-radius: 0 20px 20px 0;
+    background: transparent;
+  }
+
+  .modules-overview-page .module-image img,
+  .module-detail-page .module-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    border-radius: 0;
+  }
+
+  .modules-overview-page .module-top {
+    grid-column: 2;
+    grid-row: 1;
+    margin: 14px 0 0;
+  }
+
+  .modules-overview-page .module-text {
+    grid-column: 2;
+    grid-row: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 10px;
+    height: auto;
+    min-height: 132px;
+    padding: 14px 86px 14px 0;
+  }
+
+  .modules-overview-page .module-title {
+    margin: 0;
+    padding: 0;
+    display: block;
+    overflow: visible;
+    -webkit-line-clamp: unset;
+    line-clamp: unset;
+  }
+
+  .modules-overview-page .module-description {
+    margin: 0;
+    padding: 0;
+    display: block;
+    overflow: visible;
+    -webkit-line-clamp: unset;
+    line-clamp: unset;
+    max-width: none;
+    width: 100%;
+  }
+
+  .module-detail-page .module-top {
+    grid-column: 2;
+    grid-row: 1;
+    margin: 14px 0 0;
+  }
+
+  .module-detail-page .module-text-detail {
+    grid-column: 2;
+    grid-row: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 6px;
+    height: auto;
+    min-height: 132px;
+    padding: 14px 74px 14px 0;
+  }
+
+  .module-detail-page .module-title-detail {
+    margin: 0;
+    padding: 0;
+    display: block;
+    overflow: visible;
+    -webkit-line-clamp: unset;
+    line-clamp: unset;
+  }
+
+  .module-detail-page .module-description-detail {
+    margin: 0;
+    padding: 0;
+  }
+
+  .module-detail-page .tags,
+  .module-detail-page div.tags {
+    width: 100%;
+    margin: 0 0 4px;
+    padding-top: 0;
+    column-gap: 6px;
+    row-gap: 4px;
+  }
+
+  .module-detail-page .scenario-description {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+  }
+
+  .modules-page .tag,
+  .scenario-drawer .tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: fit-content;
+    line-height: 1.15;
+  }
+
+  .modules-page .tag span,
+  .scenario-drawer .tag span {
+    display: block;
+    width: 100%;
+    text-align: center;
+  }
 }
 
 
+@media (max-width: 768px) {
+  .modules-overview-page .module-text {
+    padding-right: 0;
+  }
+
+  .modules-overview-page .module-title {
+    padding-right: 86px;
+  }
+
+  .modules-overview-page .module-description {
+    padding-right: 0;
+    width: 100%;
+    max-width: none;
+  }
+
+  .module-detail-page .module-text-detail {
+    padding-right: 0;
+  }
+
+  .module-detail-page .module-title-detail {
+    padding-right: 74px;
+  }
+
+  .module-detail-page .module-description-detail,
+  .module-detail-page .scenario-description {
+    width: 100%;
+    max-width: none;
+    padding-right: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .modules-overview-page .module-card {
+    min-height: 164px;
+  }
+
+  .modules-overview-page .module-image {
+    height: 164px;
+    min-height: 164px;
+    border-radius: 22px 0 0 22px;
+  }
+
+  .modules-overview-page .module-image img {
+    border-radius: 22px 0 0 22px !important;
+  }
+
+  .modules-overview-page .module-text {
+    min-height: 164px;
+    justify-content: space-between;
+  }
+
+  .modules-overview-page .module-description {
+    margin-top: auto;
+  }
+
+  .module-detail-page .module-card {
+    min-height: 164px;
+  }
+
+  .module-detail-page .module-image {
+    height: 164px;
+    min-height: 164px;
+    border-radius: 22px 0 0 22px;
+  }
+
+  .module-detail-page .module-image img {
+    border-radius: 22px 0 0 22px !important;
+  }
+
+  .module-detail-page .module-text-detail {
+    min-height: 164px;
+    justify-content: space-between;
+  }
+
+  .module-detail-page .module-description-detail,
+  .module-detail-page .tags,
+  .module-detail-page div.tags,
+  .module-detail-page .scenario-description {
+    margin-top: auto;
+  }
+}
+
+
+
+@media (max-width: 768px) {
+  .module-detail-page .module-text-detail {
+    justify-content: flex-start;
+  }
+
+  .module-detail-page .module-description-detail {
+    margin-top: auto;
+    margin-bottom: 15px;
+  }
+
+  .module-detail-page .tags,
+  .module-detail-page div.tags,
+  .module-detail-page .scenario-description {
+    margin-top: 0;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .modules-overview-page .module-progress-bar {
+    width: 64px;
+    height: 18px;
+  }
+
+  .modules-overview-page .module-progress-fill {
+    min-width: 30px;
+    padding-right: 6px;
+  }
+
+  .modules-overview-page .module-progress-fill span {
+    font-size: 9px;
+  }
+
+  .module-detail-page .module-detail-header .course-progress-bar {
+    width: 120px;
+    
+  }
+
+  .module-detail-page .course-progress-fill span {
+    font-size: 12px;
+  }
+}

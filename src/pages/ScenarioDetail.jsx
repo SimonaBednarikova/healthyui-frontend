@@ -1,4 +1,4 @@
-import "./ScenarioDetail.css";
+﻿import "./ScenarioDetail.css";
 import ScenarioCard from "../components/ScenarioCard";
 
 import { useParams, useNavigate } from "react-router-dom";
@@ -35,7 +35,7 @@ export default function ScenarioDetail({ mobileOpen, setMobileOpen }) {
 
   const [inCall, setInCall] = useState(false);
   const [micError, setMicError] = useState(null);
-  /*ukladanie voice do DB - v intevaloch aby bol vĹľdy zapis o tom Ĺľe sa to stalo ig.*/
+  /*ukladanie voice do DB - v intevaloch aby bol vÄąÄľdy zapis o tom ÄąÄľe sa to stalo ig.*/
   const messagesRef = useRef([]);
   const hasSavedFinalRef = useRef(false);
   const assistantBufferRef = useRef("");
@@ -64,6 +64,16 @@ export default function ScenarioDetail({ mobileOpen, setMobileOpen }) {
     loadScenario();
   }, [scenarioId]);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (window.innerWidth > 768) return;
+
+    setMobileOpen(true);
+
+    return () => {
+      setMobileOpen(false);
+    };
+  }, [scenarioId, setMobileOpen]);
   async function sendMessage() {
     if (!input.trim() || sending || !user) return;
 
@@ -103,13 +113,13 @@ export default function ScenarioDetail({ mobileOpen, setMobileOpen }) {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
-    // okamĹľite zastavĂ­me â€“ ide nĂˇm len o permission
+    // okamÄąÄľite zastavÄ‚Â­me Ă˘â‚¬â€ś ide nÄ‚Ë‡m len o permission
     stream.getTracks().forEach((t) => t.stop());
 
     return true;
   } catch (err) {
     console.error("Mic permission error:", err);
-    setMicError("Prístup k mikrofónu bol zamietnutý");
+    setMicError("PrĂ­stup k mikrofĂłnu bol zamietnutĂ˝");
     return false;
   }
 }
@@ -193,7 +203,7 @@ export default function ScenarioDetail({ mobileOpen, setMobileOpen }) {
     const callToken = Symbol("realtime-call");
     activeCallTokenRef.current = callToken;
 
-    // đź‘‡ novĂ˝ permission krok
+    // Ä‘Ĺşâ€â€ˇ novÄ‚Ëť permission krok
     if (!micPermissionAsked) {
       const ok = await requestMicrophonePermission();
       setMicPermissionAsked(true);
@@ -211,7 +221,7 @@ export default function ScenarioDetail({ mobileOpen, setMobileOpen }) {
     }
 
     try {
-      // 1ď¸Źvytvor realtime session
+      // 1ÄŹÂ¸Ĺąvytvor realtime session
       // LOCAL :  "http://localhost:3001/realtime-session",
       const sessionRes = await fetch(
         `${import.meta.env.VITE_API_URL}/realtime-session`,
@@ -226,11 +236,11 @@ export default function ScenarioDetail({ mobileOpen, setMobileOpen }) {
       if (!sessionRes.ok) throw new Error(session.error);
       if (activeCallTokenRef.current !== callToken) return;
 
-      // 2ď¸ŹWebRTC peer
+      // 2ÄŹÂ¸ĹąWebRTC peer
       const pc = new RTCPeerConnection();
       pcRef.current = pc;
 
-      // Data channel pre textovĂ© eventy
+      // Data channel pre textovÄ‚Â© eventy
       const dc = pc.createDataChannel("oai-events");
       dataChannelRef.current = dc;
 
@@ -283,7 +293,7 @@ export default function ScenarioDetail({ mobileOpen, setMobileOpen }) {
         }
       };
 
-      // 3ď¸Źaudio vĂ˝stup
+      // 3ÄŹÂ¸Ĺąaudio vÄ‚Ëťstup
       const audio = document.createElement("audio");
       audio.autoplay = true;
       audioRef.current = audio;
@@ -305,7 +315,7 @@ export default function ScenarioDetail({ mobileOpen, setMobileOpen }) {
         }
       };
 
-      // 4ď¸Źmic vstup
+      // 4ÄŹÂ¸Ĺąmic vstup
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: true,
       });
@@ -318,11 +328,11 @@ export default function ScenarioDetail({ mobileOpen, setMobileOpen }) {
 
       stream.getTracks().forEach((track) => pc.addTrack(track, stream));
 
-      // 5ď¸ŹSDP offer
+      // 5ÄŹÂ¸ĹąSDP offer
       const offer = await pc.createOffer();
       await pc.setLocalDescription(offer);
 
-      // NEW â€” proxy cez backend (bez CORS)
+      // NEW Ă˘â‚¬â€ť proxy cez backend (bez CORS)
       const sdpRes = await fetch(
         `${import.meta.env.VITE_API_URL}/realtime-connect?model=${session.model}`,
         {
@@ -350,8 +360,8 @@ export default function ScenarioDetail({ mobileOpen, setMobileOpen }) {
       setInCall(true);
       hasSavedFinalRef.current = false;
     } catch (err) {
-      console.error("Ă˘ĹĄĹš Realtime start error:", err);
-      setMicError(err?.message || "Nepodarilo sa spustiť mikrofón");
+      console.error("Ä‚ËÄąÄ„ÄąĹˇ Realtime start error:", err);
+      setMicError(err?.message || "Nepodarilo sa spustiĹĄ mikrofĂłn");
       teardownRealtimeResources();
       setInCall(false);
     } finally {
@@ -362,10 +372,10 @@ export default function ScenarioDetail({ mobileOpen, setMobileOpen }) {
     try {
       if (!messagesRef.current.length) return;
 
-      // âť— iba finĂˇlny save mĂˇ Ă­sĹĄ do DB
+      // Ă˘ĹĄâ€” iba finÄ‚Ë‡lny save mÄ‚Ë‡ Ä‚Â­sÄąÄ„ do DB
       if (!isFinal) return;
 
-      // zabrĂˇni dvojitĂ©mu zĂˇpisu
+      // zabrÄ‚Ë‡ni dvojitÄ‚Â©mu zÄ‚Ë‡pisu
       if (hasSavedFinalRef.current) return;
 // LOCAL : await fetch("http://localhost:3001/save-realtime-transcript"
       await fetch(`${import.meta.env.VITE_API_URL}/save-realtime-transcript`, {
@@ -452,27 +462,27 @@ export default function ScenarioDetail({ mobileOpen, setMobileOpen }) {
           />
 
           <button onClick={sendMessage} disabled={sending}>
-            {sending ? "AI odpovedĂˇâ€¦" : "OdoslaĹĄ"}
+            {sending ? "AI odpovedÄ‚Ë‡Ă˘â‚¬Â¦" : "OdoslaÄąÄ„"}
           </button>
            */}
            <div className="voice-controls">
 
-  {/* INFO pred prvĂ˝m povolenĂ­m mikrofĂłnu */}
+  {/* INFO pred prvÄ‚Ëťm povolenÄ‚Â­m mikrofÄ‚Ĺ‚nu */}
 {micError && (
   <div className="mic-hint-pristup">
-    Aplikácia potrebuje prítup k mikrofónu.
+    Aplikácia potrebuje prístup k mikrofónu, aby ste mohli začať rozhovor. Prosím, povoľte prístup a skúste to znovu.
   </div>
 )}
 
 
-  {/* HLAVNĂť KRUHOVĂť BUTTON */}
+  {/* HLAVNÄ‚ĹĄ KRUHOVÄ‚ĹĄ BUTTON */}
   <div className="mic-wrapper">
   <button
     className={`mic-button ${inCall ? "active" : ""}`}
     onClick={inCall ? stopRealtimeCall : startRealtimeCall}
   >
     <div className="mic-content">
-      <img src={micIcon} alt="Mikrofón" className="mic-icon-img" />
+      <img src={micIcon} alt="MikrofĂłn" className="mic-icon-img" />
       <span className="mic-text">
       {inCall ? (
         <>
@@ -491,7 +501,7 @@ export default function ScenarioDetail({ mobileOpen, setMobileOpen }) {
   {!inCall && (
     <div className="mic-hint-text">
 
-      Po stlačení mikrofónu sa spusti­ voice chat.
+      Po stlačení mikrofónu sa spustí voice chat.
       Začnite ho pozdravom.
     </div>
   )}
@@ -514,3 +524,4 @@ export default function ScenarioDetail({ mobileOpen, setMobileOpen }) {
     </div>
   );
 }
+

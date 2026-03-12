@@ -1,5 +1,5 @@
-import { createContext, useContext, useEffect, useState, useCallback } from "react";
-import { DIRECTUS_URL } from "../lib/directus";
+﻿import { createContext, useContext, useEffect, useState, useCallback } from "react";
+import { DIRECTUS_URL, clearAuthTokens, refreshAccessToken } from "../lib/directus";
 
 const AuthContext = createContext(null);
 
@@ -8,71 +8,60 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   const refreshUser = useCallback(async () => {
-  let token = localStorage.getItem("access_token");
-  const refreshToken = localStorage.getItem("refresh_token");
+    let token = localStorage.getItem("access_token");
 
-  if (!token) {
-    setUser(null);
-    return null;
-  }
-
-  try {
-    const res = await fetch(`${DIRECTUS_URL}/users/me`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (res.ok) {
-      const json = await res.json();
-      setUser(json.data);
-      return json.data;
+    if (!token) {
+      token = await refreshAccessToken();
     }
 
-    // 🔥 ak je 401 → skúsiť refresh
-    if (res.status === 401 && refreshToken) {
-      const refreshRes = await fetch(`${DIRECTUS_URL}/auth/refresh`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          refresh_token: refreshToken,
-        }),
-      });
+    if (!token) {
+      setUser(null);
+      return null;
+    }
 
-      if (!refreshRes.ok) throw new Error("Refresh failed");
-
-      const refreshJson = await refreshRes.json();
-
-      // uložiť nový access token
-      localStorage.setItem("access_token", refreshJson.data.access_token);
-
-      token = refreshJson.data.access_token;
-
-      // znova načítať usera
-      const retryRes = await fetch(`${DIRECTUS_URL}/users/me`, {
+    const loadUser = async (authToken) => {
+      const res = await fetch(`${DIRECTUS_URL}/users/me`, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${authToken}`,
         },
       });
 
-      if (!retryRes.ok) throw new Error("Retry failed");
+      if (!res.ok) {
+        return null;
+      }
 
-      const retryJson = await retryRes.json();
-      setUser(retryJson.data);
-      return retryJson.data;
+      const json = await res.json();
+      setUser(json.data);
+      return json.data;
+    };
+
+    try {
+      const currentUser = await loadUser(token);
+      if (currentUser) {
+        return currentUser;
+      }
+
+      const nextToken = await refreshAccessToken();
+      if (!nextToken) {
+        clearAuthTokens();
+        setUser(null);
+        return null;
+      }
+
+      const refreshedUser = await loadUser(nextToken);
+      if (refreshedUser) {
+        return refreshedUser;
+      }
+
+      clearAuthTokens();
+      setUser(null);
+      return null;
+    } catch (error) {
+      console.error("Auth refresh error", error);
+      return null;
     }
+  }, []);
 
-    throw new Error("Unauthorized");
-  } catch (e) {
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("refresh_token");
-    setUser(null);
-    return null;
-  }
-}, []);
-
-
-  // ⬅️ spustí sa pri štarte appky
   useEffect(() => {
     (async () => {
       setLoading(true);
@@ -84,24 +73,19 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const interval = setInterval(() => {
       refreshUser();
-    }, 4 * 60 * 1000); // každé 4 min
+    }, 4 * 60 * 1000);
 
     return () => clearInterval(interval);
   }, [refreshUser]);
 
   function logout() {
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("refresh_token");
+    clearAuthTokens();
     setUser(null);
-
-    // 🔑 tvrdý reset appky (najspoľahlivejší pri prepínaní userov)
     window.location.href = "/";
   }
 
   return (
-    <AuthContext.Provider
-      value={{ user, setUser, loading, logout, refreshUser }}
-    >
+    <AuthContext.Provider value={{ user, setUser, loading, logout, refreshUser }}>
       {children}
     </AuthContext.Provider>
   );

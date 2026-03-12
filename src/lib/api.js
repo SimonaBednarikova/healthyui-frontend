@@ -1,22 +1,40 @@
-import { DIRECTUS_URL } from "./directus";
+﻿import { DIRECTUS_URL, clearAuthTokens, refreshAccessToken } from "./directus";
 
 export async function api(endpoint, options = {}) {
-  const token = localStorage.getItem("access_token");
+  let token = localStorage.getItem("access_token");
 
-  const res = await fetch(`${DIRECTUS_URL}${endpoint}`, {
-    method: options.method || "GET",
-    headers: {
-      "Content-Type": "application/json",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...(options.headers || {}),
-    },
-    body: options.body ? JSON.stringify(options.body) : undefined,
-  });
+  if (!token) {
+    token = await refreshAccessToken();
+  }
+
+  const makeRequest = (authToken) =>
+    fetch(`${DIRECTUS_URL}${endpoint}`, {
+      method: options.method || "GET",
+      headers: {
+        "Content-Type": "application/json",
+        ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
+        ...(options.headers || {}),
+      },
+      body: options.body ? JSON.stringify(options.body) : undefined,
+    });
+
+  let res = await makeRequest(token);
 
   if (res.status === 401) {
-  throw new Error("Unauthorized");
-}
+    const nextToken = await refreshAccessToken();
 
+    if (!nextToken) {
+      clearAuthTokens();
+      throw new Error("Unauthorized");
+    }
+
+    res = await makeRequest(nextToken);
+
+    if (res.status === 401) {
+      clearAuthTokens();
+      throw new Error("Unauthorized");
+    }
+  }
 
   if (!res.ok) {
     const text = await res.text();

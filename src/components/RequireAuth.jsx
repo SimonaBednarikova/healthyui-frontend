@@ -1,4 +1,4 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { useEffect, useRef } from "react";
 import { useAuth } from "../context/AuthContext";
 import { initProgressIfNeeded } from "../lib/initProgress";
@@ -6,6 +6,7 @@ import { initProgressIfNeeded } from "../lib/initProgress";
 export default function RequireAuth({ children }) {
   const { user, loading } = useAuth();
   const initRanRef = useRef(false);
+  const location = useLocation();
 
   // ✅ HOOK VŽDY ZAVOLANÝ
   useEffect(() => {
@@ -24,7 +25,7 @@ export default function RequireAuth({ children }) {
 
   // 🔒 nie je prihlásený → login
   if (!user) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/" replace state={{ from: location }} />;
   }
 
   // ✅ všetko OK

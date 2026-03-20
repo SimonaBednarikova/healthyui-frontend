@@ -1,0 +1,19 @@
+DirectoryIndex index.html
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Nechaj existujuce subory, symlinky a adresare bez zmeny.
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d [OR]
+  RewriteCond %{REQUEST_FILENAME} -l
+  RewriteRule ^ - [L]
+
+  # React SPA fallback: vsetky ostatne cesty obsluz cez index.html.
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+<IfModule !mod_rewrite.c>
+  ErrorDocument 404 /index.html
+</IfModule>
